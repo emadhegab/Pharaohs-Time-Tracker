@@ -1,0 +1,89 @@
+<script type='text/JavaScript' src="scripts/timeTracker.js"></script>
+<script type="text/javascript" src="scripts/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="scripts/jquery-ui-1.7.2.custom.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$("#date").datepicker({showOn: 'button', buttonImage: 'images/calendar.png', buttonImageOnly: true});
+		$("#accordion").accordion({
+			collapsible: true,
+			active:false
+		});
+	});
+	function showEditform(id){
+		
+		$("#dialog").dialog({
+			bgiframe: true,
+			height: 190,
+			modal: true,
+			buttons: { "Ok": function() { $(this).dialog("close"); }, "Cancel": function() { $(this).dialog("close"); } }
+		});
+		$("#dialog").dialog('open');
+	}
+</script>
+<link href="styles/content.css" rel="stylesheet" type="text/css" />
+<link href="styles/jquery-ui-1.7.2.custom.css" rel="stylesheet" type="text/css" />
+<body>
+	<div title="Error" id="error" style="display:none;"></div>
+	<div id="dialog" title="&nbsp&nbsp<img src='images/edit.png'/> Update Activity" style="display:none;">
+		<div class="box-row01">
+			<div class="dialog-cel01">Activity :</div>
+			<div class="dialog-cel02">
+				<input  id="activityId" name="activityId" type="hidden"/>
+				<input class="box" id="activityName" name="activityName" type="text"/>
+			</div>
+		</div>
+		<div class="box-row01">
+			<div class="dialog-cel11">Time :</div>
+			<div class="dialog-cel12">
+				<input class="box-small" id="from" name="from" type="text"/>
+			</div>
+			<div class="dialog-cel13">
+				<input class="box-small" id="to" name="to" type="text"/>
+			</div>
+			<div class="dialog-cel14">
+				<input type="checkbox" id="inprogress" >in progress
+			</div>
+		</div>
+		<div class="box-row01">
+			<div class="dialog-cel21">Description :</div>
+			<div class="dialog-cel22">
+				<textarea class="textArea" id="description"rows="2" cols="20"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="popup-box">
+		<div class="popup-title">Time Tracker</div>
+		<div class="content-popup">
+		<div class="box-row01">
+			<div class="box-cel01">Activity :</div>
+			<div class="box-cel02">
+				<input class="box" id="activity" name="activity" type="text"/>
+			</div>
+			<div class="box-cell03">
+				<input id="start" class="button" name="start" value="Start Tracking" type="button" onclick="startTracking();"/>
+			</div>
+		</div>
+		<div class="box-row01">
+			<div class="box-cell01">
+				<input id="date" type="hidden"  />
+			</div>
+			<div class="box-cell02">
+				<div id="accordion">
+					<h3><a href="#">Activity List</a></h3>
+					<div style="height:auto;">
+						<table class="activityTable" cellpadding="0" cellspacing="0">
+							<thead>
+								<th style="text-align: left;width:80%">Activity</th>
+								<th style="text-align: center;width:15%">Duration</th>
+								<th style="text-align: center;width:5%"></th>
+							</thead>
+							<tbody class="activityTable" id="activityList" >
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</DIV>
+		</div>
+	</div>
+</body>	
+

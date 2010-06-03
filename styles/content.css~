@@ -1,0 +1,30 @@
+/* --------------------------------- */
+/* CSS FOR popup */
+body {min-width:480px;min-height:120px;overflow-x:hidden;}
+/* --------------------------------- */
+.popup-box {width:480px;margin:0px auto 0px auto;border:#DCDCF2 1px solid;overflow:auto;margin-bottom:100px;}
+.popup-title {width:467px;padding-left:13px;height:20px;padding-top:3px;float:left;font:bold 12px Arial;text-align:center;color:#000000;background-color:#DCDCF2;}
+.content-popup {float:left;width:465px;padding:17px 0 17px 15px;background:#FFFFFF;opacity:0.9;filter: alpha(opacity=90);}
+.box-cel01 {float:left;width:13%;padding-top:2px;font:bold 12px Arial;color:#8884B4;text-align:left;}
+.box-cel02 {float:left;width:57%;padding-right:10px;font:bold 12px Arial;color:#6E6E6E;text-align:left;}
+.dialog-cel01 {float:left;width:20%;padding-top:2px;padding-right:3px;font:bold 12px Arial;color:#8884B4;text-align:left;}
+.dialog-cel02 {float:left;width:78%;padding-right:3px;font:bold 12px Arial;color:#6E6E6E;text-align:left;}
+.dialog-cel11 {float:left;width:20%;padding-top:2px;padding-right:3px;font:bold 12px Arial;color:#8884B4;text-align:left;}
+.dialog-cel12 {float:left;width:24.5%;padding-right:3px;font:bold 12px Arial;color:#6E6E6E;text-align:left;}
+.dialog-cel13 {float:left;width:24.5%;padding-right:3px;font:bold 12px Arial;color:#6E6E6E;text-align:left;}
+.dialog-cel14 {float:left;width:27%;padding-right:3px;font:bold 12px Arial;color:#6E6E6E;text-align:left;}
+.dialog-cel21 {float:left;width:20%;padding-top:2px;padding-right:3px;font:bold 12px Arial;color:#8884B4;text-align:left;}
+.dialog-cel22 {float:left;width:78%;padding-right:3px;font:bold 12px Arial;color:#6E6E6E;text-align:left;height: 50px;}
+.box-row01 {float:left;width:100%;padding-bottom:10px;}
+.box {border:#DCDCF2 1px solid;font:normal 12px Tahoma;WIDTH: 270px; HEIGHT: 20px; background-color:#F8F8F8;}
+.textArea {border:#DCDCF2 1px solid;font:normal 12px Arial;WIDTH: 270px; height: 100%; background-color:#F8F8F8;}
+.box-small {border:#DCDCF2 1px solid;font:normal 12px Arial;WIDTH: 100%; HEIGHT: 20px; background-color:#F8F8F8;}
+.box-cell01 {width:10%;float:left;padding-left:5px;text-align:left;}
+.box-cell02 {width:80%;float:left;padding-left:5px;text-align:left;}
+.box-cell03 {width:22%;float:left;padding-left:5px;text-align:left;height:20px;}
+.button {background-color:#8884B4;font:normal 11px Arial;color:#FFFFFF;height:20px;padding:0 5px 0 5px;text-align:center;cursor: pointer;}
+.box-cell04 {float:left;width:20%;float:left;padding-left:5px;text-align:left;height:20px;}
+.box-cell04 a, .box-cell04 a:active, .box-cell04 a:visited {color:#EDAD34;text-decoration:underline;}
+.box-cell04 a:hover {color:#EDAD34;text-decoration:none;}
+.activityTable {width: 100%;background: #ffffff;font-weight: normal;border: 1px #ffffff solid;font:normal 11px Arial;}
+.activityTable th {background: #8884B4;color: #ffffff;}

@@ -1,0 +1,11 @@
+{
+  "name": "Time Tracker",
+  "version": "1.0",
+  "description": "Calendar popup which it's functionality will be added soon.",
+  "icons": { "128": "images/icon.png" },
+  "browser_action": {
+    "default_icon": "images/icon.png",
+    "default_title": "Time Tracker",
+    "popup": "popup.html"
+  }
+}

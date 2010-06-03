@@ -1,0 +1,7 @@
+function startTracking(task){
+	
+}
+function endTracking(task);
+function editTask(task);
+function addPreviousTask(task);
+	
