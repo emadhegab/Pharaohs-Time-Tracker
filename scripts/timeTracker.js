@@ -31,12 +31,29 @@ function init(tx,error){
 init(null,null);
 
 function startTracking(){
+var activityField =document.getElementById("activity").value;  
+  if(activityField !=null && activityField!=""){ 
+    $('#start').toggle();
+    $('#stop').toggle();
 	var activity= document.getElementById("activity").value;
 	db.transaction(
 		function(tx) {
 			tx.executeSql("INSERT INTO timeTracker (activity,start) VALUES(?,?)", 
 				[activity,new Date()], updateTracker, showError);	
 		}
+	);
+  }else{
+      $('#errorValidation').html("Please Fill Your Activty! ");
+  }
+}
+function stopTracking(){
+    $('#start').toggle();
+    $('#stop').toggle();
+	 	db.transaction(
+		/**function(tx) {
+			tx.executeSql("update  timeTracker set end = ? where id= ", 
+				[new Date()], updateTracker, showError);	
+		}**/
 	);	
 }
 
@@ -57,9 +74,13 @@ function populateAcvtivityList(tx,result){
 	var activityListStr=""
 	for(var i = 0; i < result.rows.length; i++) {
 		activityListStr+="<tr>";
+        activityListStr+="<td>"+getStartDate(result.rows.item(i))+"<\/td>";
 		activityListStr+="<td>"+result.rows.item(i)['activity']+"<\/td>";
 		activityListStr+="<td tyle='text-align: center;' >"+getDuration(result.rows.item(i))+"<\/td>";
-		activityListStr+="<td><img src='images/edit.png' onclick='showEditForm("+result.rows.item(i)['id']+");'/></td>";
+		activityListStr+="<td><img style=\"cursor:pointer\" src='images/edit.png' "
+			+"onclick='showEditForm("+result.rows.item(i)['id']+");'/></td>";
+        activityListStr+="<td><img style=\"cursor:pointer\" height=\"16\" width=\"16\" src='images/delete.ico' "+
+        	"onclick='deleteActivity("+result.rows.item(i)['id']+");'/></td>";
 		activityListStr+="<\/tr>";
 	}
 	activityList.innerHTML=activityListStr;
@@ -67,6 +88,24 @@ function populateAcvtivityList(tx,result){
 
 function updateTracker(tx, result){
 	//TODO every minute Update Tracker and DB with new values
+}
+
+
+function getStartDate(activity){
+	var start = new Date(activity['start']);
+	var minutes=start.getMinutes();
+	var hours= start.getHours();
+	var duration="";
+	if(hours<10){
+		duration='0';
+	}
+	duration+=hours+":";
+	if(minutes<10){
+		duration+="0";
+	}
+	duration+=minutes;
+	return duration;
+ 
 }
 
 function getDuration(activity){
@@ -135,4 +174,10 @@ function inProgressSelected(elem){
 	}else{
 		document.getElementById("to").disabled=false;
 	} 
+}
+
+
+function removeValidationMessage(){
+    var errorValidation = document.getElementById("errorValidation");
+    $("#errorValidation").html("");
 }
