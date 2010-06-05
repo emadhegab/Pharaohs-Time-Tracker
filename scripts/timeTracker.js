@@ -1,4 +1,4 @@
-var maxId=0;
+var db;
 var MAX_FAILURE_COUNT=3;
 var failureCount=0;
 
@@ -8,7 +8,7 @@ function init(tx,error){
 		function(tx) {
 			//tx.executeSql("DROP TABLE timeTracker", [], null, init);	
 			tx.executeSql("CREATE TABLE IF NOT EXISTS timeTracker (id INTEGER PRIMARY KEY ,activity TEXT"
-				+", description TEXT,start TIMESTAMP,end TIMESTAMP,day DATE)", [], null, init);	
+				+", description TEXT,start TIME,end TIME)", [], null, init);	
 		}
 	);	
 	if(!db){
@@ -21,8 +21,8 @@ function init(tx,error){
 	}else{
 		db.transaction(
 			function(tx) {
-				tx.executeSql("SELECT * FROM timeTracker ",[],populateAcvtivityList,showError);
-				//tx.executeSql("SELECT max(id) FROM timeTracker ", [],setMaxId,showError);	
+				tx.executeSql("SELECT * FROM timeTracker WHERE '"+new Date()+"' BETWEEN start AND"
+				+" COALESCE(end,'"+new Date()+"')",[],populateAcvtivityList,showError);
 			}
 		);	
 	}
@@ -30,20 +30,12 @@ function init(tx,error){
 
 init(null,null);
 
-//function setMaxId(tx,result){
-	//if(result.rows.length>0){
-		//maxId=result.rows.item(0)['id'];
-	//}
-	//alert(maxId);
-//}
-
 function startTracking(){
 	var activity= document.getElementById("activity").value;
-	var start=new Date();
 	db.transaction(
 		function(tx) {
-			tx.executeSql("INSERT INTO timeTracker (activity,start,day) VALUES(?,?,?)", 
-				[activity,start,new Date()], updateTracker, showError);	
+			tx.executeSql("INSERT INTO timeTracker (activity,start) VALUES(?,?)", 
+				[activity,new Date()], updateTracker, showError);	
 		}
 	);	
 }
@@ -60,7 +52,6 @@ function showError(tx,error){
 	$("#error").dialog('open');
 }
 
-//TODO test
 function populateAcvtivityList(tx,result){
 	var activityList=document.getElementById('activityList');
 	var activityListStr=""
@@ -68,18 +59,80 @@ function populateAcvtivityList(tx,result){
 		activityListStr+="<tr>";
 		activityListStr+="<td>"+result.rows.item(i)['activity']+"<\/td>";
 		activityListStr+="<td tyle='text-align: center;' >"+getDuration(result.rows.item(i))+"<\/td>";
-		activityListStr+="<td><img src='images/edit.png' onclick='showEditform("+result.rows.item(i)['id']+");'/></td>";//NULL !!!
+		activityListStr+="<td><img src='images/edit.png' onclick='showEditForm("+result.rows.item(i)['id']+");'/></td>";
 		activityListStr+="<\/tr>";
 	}
 	activityList.innerHTML=activityListStr;
 }
 
 function updateTracker(tx, result){
-	alert("sucesss");
 	//TODO every minute Update Tracker and DB with new values
 }
 
 function getDuration(activity){
-	return "00:00"
-	//TODO calculate duration from (from,to) if to= null then to =NOW 
+	var start=new Date(activity['start']);
+	var end=new Date();
+	if(activity['end']!=null){
+		end=new Date(activity['end'])
+	}
+	var duration=(end.getTime()-start.getTime())/1000;
+	var minutes=parseInt(duration/60)%60;
+	var hours= parseInt(duration/3600);
+	duration="";
+	if(hours<10){
+		duration='0';
+	}
+	duration+=hours+":";
+	if(minutes<10){
+		duration+="0";
+	}
+	duration+=minutes;
+	return duration;
+}
+
+function showEditForm(id){
+		populateEditForm(id);
+		$("#dialog").dialog({
+			bgiframe: true,
+			height: 190,
+			modal: true,
+			buttons: { "Ok":function(){saveEditedActivity();}, "Cancel": function(){$(this).dialog("close");}}
+		});
+		$("#dialog").dialog('open');
+}
+
+function populateEditForm(id){
+	db.transaction(
+		function(tx) {
+			tx.executeSql("SELECT * FROM timeTracker WHERE id=?", 
+				[id], function(tx,result){
+					var activity=result.rows.item(0);
+					var start=new Date(activity['start']);
+					document.getElementById("activityId").value=activity['id'];
+					document.getElementById("activityName").value=activity['activity'];
+					document.getElementById("description").value=activity['description'];
+					document.getElementById("from").value=start.getHours()+":"+start.getMinutes();
+					if(activity['end']==null){
+						document.getElementById("to").disabled=true;
+						document.getElementById("inprogress").checked=true;
+					}else {
+						var end=new Date(activity['end']);
+						document.getElementById("to").value=end.getHours()+":"+end.getMinutes();
+					}
+				}, showError);	
+		}
+	);	
+}
+
+function saveEditedActivity(){
+	//TODO save edited activity
+	$("#dialog").dialog('close');
+}
+
+function inProgressSelected(elem){
+	if(elem.checked){
+		document.getElementById("to").disabled=true;
+	}else{
+		document.getElementById("to").disabled=false;
+	} 
 }

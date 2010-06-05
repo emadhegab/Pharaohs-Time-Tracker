@@ -9,16 +9,6 @@
 			active:false
 		});
 	});
-	function showEditform(id){
-		
-		$("#dialog").dialog({
-			bgiframe: true,
-			height: 190,
-			modal: true,
-			buttons: { "Ok": function() { $(this).dialog("close"); }, "Cancel": function() { $(this).dialog("close"); } }
-		});
-		$("#dialog").dialog('open');
-	}
 </script>
 <link href="styles/content.css" rel="stylesheet" type="text/css" />
 <link href="styles/jquery-ui-1.7.2.custom.css" rel="stylesheet" type="text/css" />
@@ -41,7 +31,7 @@
 				<input class="box-small" id="to" name="to" type="text"/>
 			</div>
 			<div class="dialog-cel14">
-				<input type="checkbox" id="inprogress" >in progress
+				<input type="checkbox" id="inprogress" onchange="inProgressSelected(this)" >in progress
 			</div>
 		</div>
 		<div class="box-row01">
