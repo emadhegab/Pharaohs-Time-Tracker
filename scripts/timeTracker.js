@@ -6,7 +6,7 @@ function init(tx,error){
 	db = openDatabase("timeTracker_v1", "0.1", "Time tracker database.", 200000);
 	db.transaction(
 		function(tx) {
- //		  tx.executeSql("DROP TABLE timeTracker", [], null, init);	
+ 	  //tx.executeSql("DROP TABLE timeTracker", [], null, init);	
 
  	 		tx.executeSql("CREATE TABLE IF NOT EXISTS timeTracker (id INTEGER PRIMARY KEY ,activity TEXT"
  	  			+", description TEXT,start TIME,end TIME,day INTEGER,month INTEGER"
@@ -96,6 +96,7 @@ function populateAcvtivityList(tx,result){
 	var activityList=document.getElementById('activityList');
 	var activityListStr=""
     var end="";
+    var start = new Date();
 	for( i = 0; i < result.rows.length; i++) {
 		activityListStr+="<tr style=\"cursor:pointer;\" ondblclick=\"insertDuplicatActivity("+result.rows.item(i)['id']+")\">";
         activityListStr+="<td>"+getStartDate(result.rows.item(i))+"<\/td>";
@@ -107,11 +108,13 @@ function populateAcvtivityList(tx,result){
         	"onclick='deleteActivity("+result.rows.item(i)['id']+");'/></td>";
 		activityListStr+="<\/tr>";
           end= result.rows.item(i)['end'];
+          start= result.rows.item(i)['start'];
 	}
 
     if(end==null){
      $('#start').hide();
      $('#stop').show();
+     updateBadge(new Date(start));     
     }
     if(result.rows.length=="0"){
         activityListStr= "<tr><td colspan=\"5\">You've Got No Activity This Day</td></tr>";
@@ -371,5 +374,20 @@ return false;
 //if (returnval==false) input.select()
 //return returnval
 }
- 
+function updateBadge(time) {
+	var badge = getDateDifferenceAsMinutes(time, new Date()) ;
+	chrome.browserAction.setBadgeText({text:badge});
+} 
+
+function getDateDifferenceAsMinutes(from, to) {
+	var diff= ((to.getTime() - from.getTime())/60000 | 0);
+	//not that  | 0 is for casting diff to integer
+	var zeros=""
+	if(diff < 10 ) {
+		zeros = "00";
+	} else if (diff >=10 && diff <= 99) {
+		zeros = "0";
+	}
+	return zeros+diff;
+}
  
