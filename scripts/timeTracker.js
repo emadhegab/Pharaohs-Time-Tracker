@@ -115,6 +115,8 @@ function populateAcvtivityList(tx,result){
 			$('#start').css("display","none");
 			IS_ACTIVITY_RUNNING = true;
  		    setInterval(function(){updateBadge(new Date(start));},50);     
+		} else {
+		   	clearBadge(); 
 		}
 	} else {
         activityListStr= "<tr><td colspan=\"5\">You've Got No Activity This Day</td></tr>";
@@ -219,48 +221,43 @@ function populateEditForm(id){
 }
 
 function saveEditedActivity(id){
-var activityDateFrom=null;
-var activityDateTo=null;
-		  
-          db.transaction(
+    var activityDateFrom=null;
+    var activityDateTo=null;
+    db.transaction(
 		function(tx) {
 			tx.executeSql("SELECT * FROM timeTracker WHERE id=?", 
-				[id], function(tx,result){
+			[id], function(tx,result){
             var activity=result.rows.item(0);
-					var start=new Date(activity['start']);
-                    var end=new Date(activity['end']);
-                    activityDateFrom=start;
-                    activityDateTo=end;
-                     
-                     
-    var from =  $('#from').val();
-    var to = $('#to').val();
-
-        var fromHours=from.substring(0,2);
-        var fromMinutes=from.substring(3,5);
-        activityDateFrom.setHours(fromHours,fromMinutes,0);        
-        if(to.length>0){
-        var toHours=to.substring(0,2);
-        var toMinutes=to.substring(3,5);
-        if(activity['end']==null){
-        activityDateTo = new Date();
-        }
-        activityDateTo.setHours(toHours,toMinutes,0);
-        }else{
-        activityDateTo=null;
-        }
+			var start=new Date(activity['start']);
+            var end=new Date(activity['end']);
+            activityDateFrom=start;
+            activityDateTo=end;
+            var from =  $('#from').val();
+            var to = $('#to').val();
+            var fromHours=from.substring(0,2);
+            var fromMinutes=from.substring(3,5);
+            activityDateFrom.setHours(fromHours,fromMinutes,0);        
+            if(to.length>0){
+                var toHours=to.substring(0,2);
+                var toMinutes=to.substring(3,5);
+            if(activity['end']==null){
+                activityDateTo = new Date();
+            }
+            activityDateTo.setHours(toHours,toMinutes,0);
+            }else{
+            activityDateTo=null;
+            }
         
-                tx.executeSql("update  timeTracker set activity =  ? where id = ? ", 
-				[$('#activityName').val(),id], updateTracker, showError);
-                
-                  			tx.executeSql("update  timeTracker set start =  ? where id = ? ", 
-				[activityDateFrom,id], updateTracker, showError);
-                            tx.executeSql("update  timeTracker set end =  ? where id = ? ", 
-				[activityDateTo,id], updateTracker, showError);
-                  			tx.executeSql("update  timeTracker set description =  ? where id = ? ", 
-				[$('#description').val(),id], updateTracker, showError);	
-
-				}, showError);	
+            tx.executeSql("update  timeTracker set activity =  ? where id = ? ", 
+			    [$('#activityName').val(),id], updateTracker, showError);
+            
+            tx.executeSql("update  timeTracker set start =  ? where id = ? ", 
+			    [activityDateFrom,id], updateTracker, showError);
+            tx.executeSql("update  timeTracker set end =  ? where id = ? ", 
+			    [activityDateTo,id], updateTracker, showError);
+  			tx.executeSql("update  timeTracker set description =  ? where id = ? ", 
+			    [$('#description').val(),id], updateTracker, showError);	
+			}, showError);	
 		}
 	);
     getActivityList(new Date());
@@ -325,9 +322,9 @@ function checktime(input){
 }
 var IS_ACTIVITY_RUNNING = false ;
 function updateBadge(time) {
-    var badge = getDateDifferenceAsMinutes(time, new Date()) ;
-    chrome.browserAction.setBadgeText({text:badge});
-	if (IS_ACTIVITY_RUNNING) {
+    if (IS_ACTIVITY_RUNNING) {
+        var badge = getDateDifferenceAsMinutes(time, new Date()) ;
+        chrome.browserAction.setBadgeText({text:badge});
         setInterval(function(){updateBadge(time);},60000);
 	}
 } 
@@ -335,6 +332,7 @@ function updateBadge(time) {
 function clearBadge() {
 	chrome.browserAction.setBadgeText({text:""});
 } 
+ 
 function getDateDifferenceAsMinutes(from, to) {
 	var diff= ((to.getTime() - from.getTime())/60000 | 0);
 	//not that  | 0 is for casting diff to integer
