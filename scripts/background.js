@@ -60,7 +60,6 @@ function getDateDifferenceAsMinutes(from, to) {
 function runNotifier(){
     setInterval(function(){
         if (currentActivity != null) {
-            alert("notification at "+ new Date());
             var notification = webkitNotifications.createNotification(
               'images/icon.png',  // icon url - can be relative
               'time tracker!',  // notification title
