@@ -13,6 +13,7 @@ function init(date){
 		function(tx) {
 			tx.executeSql("SELECT * FROM timeTracker where day = "+day+" and month = "+month+" and year = "+year+" ",				[],populateAcvtivityList,null);
 	});
+	setInterval(function(){init(new Date());},60000);
 }
 
 function populateAcvtivityList(tx,result){
@@ -27,7 +28,6 @@ function populateAcvtivityList(tx,result){
 		    stopNotifier();
 		}
 	} 
-	setInterval(function(){init(new Date());},60000);
 }
 
 function stopNotifier(){
@@ -66,6 +66,7 @@ function runNotifier(){
               'You Still Working On '+currentActivity  // notification body text
             );
             notification.show();
+            setInterval(function(){notification.cancel();},3000);
         }
         runNotifier();
     },900000);

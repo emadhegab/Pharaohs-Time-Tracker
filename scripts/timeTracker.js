@@ -240,12 +240,12 @@ function saveEditedActivity(id){
             if(to.length>0){
                 var toHours=to.substring(0,2);
                 var toMinutes=to.substring(3,5);
-            if(activity['end']==null){
-                activityDateTo = new Date();
-            }
-            activityDateTo.setHours(toHours,toMinutes,0);
+                if(activity['end']==null) {
+                    activityDateTo = new Date();
+                }
+                activityDateTo.setHours(toHours,toMinutes,0);
             }else{
-            activityDateTo=null;
+                activityDateTo=null;
             }
         
             tx.executeSql("update  timeTracker set activity =  ? where id = ? ", 
@@ -253,8 +253,10 @@ function saveEditedActivity(id){
             
             tx.executeSql("update  timeTracker set start =  ? where id = ? ", 
 			    [activityDateFrom,id], updateTracker, showError);
+			    
             tx.executeSql("update  timeTracker set end =  ? where id = ? ", 
 			    [activityDateTo,id], updateTracker, showError);
+			    
   			tx.executeSql("update  timeTracker set description =  ? where id = ? ", 
 			    [$('#description').val(),id], updateTracker, showError);	
 			}, showError);	
