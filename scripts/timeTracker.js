@@ -1,3 +1,12 @@
+/**
+ * A main popup script that manage add, update and deletion of activities
+ * Copyright 2010 the Time tracker Authors
+ * Use of this source code is governed by a BSD-style license that can be found
+ * in the "LICENSE" file.
+ * Mustafa Zidan <mustafa.zidan@gmail.com>
+ * Mohamed Emad <emadhegab@gmail.com>
+ */
+
 var db;
 var MAX_FAILURE_COUNT=3;
 var failureCount=0;

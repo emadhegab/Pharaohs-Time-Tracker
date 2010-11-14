@@ -1,3 +1,10 @@
+/**
+ * A background Script that manages notifications. and badges
+ * Copyright 2010 the Time Tracker
+ * Use of this source code is governed by a BSD-style license that can be found
+ * in the "LICENSE" file.
+ * Mustafa Zidan <mustafa.zidan@gmail.com>
+ */
 var db = openDatabase("timeTracker_v1", "0.1", "Time tracker database.", 200000);
 var NOTIFICATION_ENABLED = false;
 var currentActivity = null;
@@ -66,7 +73,7 @@ function runNotifier(){
               'You Still Working On '+currentActivity  // notification body text
             );
             notification.show();
-            setInterval(function(){notification.cancel();},3000);
+            setInterval(function(){notification.cancel();},5000);
         }
         runNotifier();
     },900000);

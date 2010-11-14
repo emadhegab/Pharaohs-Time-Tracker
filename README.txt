@@ -9,3 +9,10 @@ by choosing the day you wish from the calender icon in the upper left of the ext
 the good news is you can double click on the stopped task to duplicate it in new activity to avoid wasting time in writing the same task on and on and on.
 and the best featur is that you can also edit your activity whenever you like to resume an activity 
 so start now and have lots of work with it.. you need it.
+
+development team members.
+========================
+ Mustafa Zidan    <mustafa.zidan@gmail.com>
+ Mohamed Emad     <emadhegab@gmail.com>    
+========================
+
