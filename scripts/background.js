@@ -9,9 +9,6 @@ var db = openDatabase("timeTracker_v1", "0.1", "Time tracker database.", 200000)
 var NOTIFICATION_ENABLED = false;
 var currentActivity = null;
 
-init(new Date());
-runNotifier();
-
 function init(date){
     var day=date.getDate();
 	var month= date.getMonth()+1;
@@ -20,20 +17,22 @@ function init(date){
 		function(tx) {
 			tx.executeSql("SELECT * FROM timeTracker where day = "+day+" and month = "+month+" and year = "+year+" ",				[],populateAcvtivityList,null);
 	});
-	setInterval(function(){init(new Date());},60000);
+	setTimeout(function(){init(new Date());},60000);
+	delete day;delete month;delete year;delete date;
 }
 
 function populateAcvtivityList(tx,result){
     if (result.rows.length!="0") {
 	     var end= result.rows.item(result.rows.length-1)['end'];
-	     var start= result.rows.item(result.rows.length-1)['start']
+	     var start= new Date( result.rows.item(result.rows.length-1)['start'] );
 		if (end == null ) {
-		 	updateBadge(new Date(start)); 
+		 	updateBadge( start ); 
 		 	currentActivity = result.rows.item(result.rows.length-1)['activity'];    
 		} else {
 		    clearBadge();
 		    stopNotifier();
 		}
+		delete start; delete end; delete result
 	} 
 }
 
@@ -47,9 +46,10 @@ function clearBadge() {
 } 
 
 function updateBadge(time) {
-	
-	var badge = getDateDifferenceAsMinutes(time, new Date()) ;
+	var now = new Date();
+	var badge = getDateDifferenceAsMinutes(time, now ) ;
 	chrome.browserAction.setBadgeText({text:badge});
+    delete now , delete badge;
 } 
 
 function getDateDifferenceAsMinutes(from, to) {
@@ -65,7 +65,7 @@ function getDateDifferenceAsMinutes(from, to) {
 }
 
 function runNotifier(){
-    setInterval(function(){
+    setTimeout(function(){
         if (currentActivity != null) {
             var notification = webkitNotifications.createNotification(
               'images/icon.png',  // icon url - can be relative
@@ -73,7 +73,7 @@ function runNotifier(){
               'You Still Working On '+currentActivity  // notification body text
             );
             notification.show();
-            setInterval(function(){notification.cancel();},5000);
+            setTimeout(function(){notification.cancel();},5000);
         }
         runNotifier();
     },900000);
