@@ -10,7 +10,9 @@
 var db;
 var MAX_FAILURE_COUNT=3;
 var failureCount=0;
-
+/*
+ * Initiate Time tracker 
+ */
 function init(tx,error){
 	db = openDatabase("timeTracker_v1", "0.1", "Time tracker database.", 200000);
 	db.transaction(
